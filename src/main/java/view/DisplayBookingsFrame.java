@@ -5,16 +5,13 @@ import jdbc.controller.GuestsController;
 import jdbc.model.Guests;
 
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.util.List;
 
 public class DisplayBookingsFrame extends JFrame {
 
@@ -24,6 +21,9 @@ public class DisplayBookingsFrame extends JFrame {
     private JTabbedPane panelSelection;
     private BookingController bookingController;
     private GuestsController guestsController;
+    private JLabel labelTitle;
+    private JTextField textSearch;
+    private JButton btnSearch;
 
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class DisplayBookingsFrame extends JFrame {
     }
 
     private void initFrame() {
-        setTitle("List");
+        setTitle("Search Engine");
         setLayout(null);
         setSize(900, 570);
         setLocationRelativeTo(null);
@@ -59,6 +59,23 @@ public class DisplayBookingsFrame extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setLayout(null);
         add(mainPanel);
+
+        labelTitle = new JLabel("SEARCH ENGINE");
+        labelTitle.setBounds(340, 40, 190, 31);
+        labelTitle.setFont(new Font("Roboto", Font.BOLD, 19));
+        mainPanel.add(labelTitle);
+
+        textSearch = new JTextField();
+        textSearch.setBounds(600, 100, 120, 31);
+        textSearch.setFont(new Font("Roboto", Font.PLAIN, 16));
+        mainPanel.add(textSearch);
+
+        btnSearch = new JButton("SEARCH");
+        btnSearch.setBounds(750,100,120,30);
+        btnSearch.setFont(new Font("Roboto", Font.PLAIN, 18));
+        btnSearch.setForeground(Color.BLACK);
+        btnSearch.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        mainPanel.add(btnSearch);
 
 
 
@@ -106,13 +123,13 @@ public class DisplayBookingsFrame extends JFrame {
 
         btnEdit = new JButton("EDIT");
         btnEdit.setBounds(600, 480, 120, 30);
-        btnEdit.setFont(new Font("Roboto", Font.BOLD, 18));
+        btnEdit.setFont(new Font("Roboto", Font.PLAIN, 18));
         btnEdit.setForeground(Color.BLACK);
         btnEdit.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
         btnDelete = new JButton("DELETE");
         btnDelete.setBounds(750,480,120,30);
-        btnDelete.setFont(new Font("Roboto", Font.BOLD, 18));
+        btnDelete.setFont(new Font("Roboto", Font.PLAIN, 18));
         btnDelete.setForeground(Color.BLACK);
         btnDelete.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
