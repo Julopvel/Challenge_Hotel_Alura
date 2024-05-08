@@ -32,4 +32,8 @@ public class BookingController {
     public List<Booking> list(){
         return this.bookingDAO.list();
     }
+
+    public List<Booking> listId(int id){
+        return this.bookingDAO.bookingListId(id);
+    }
 }
