@@ -116,5 +116,35 @@ public class BookingDAO {
         return listaBooking;
     }
 
+    public List<Booking> bookingListId(int id){
+        List<Booking> bookingList = new ArrayList<>();
+        String query = "SELECT id, check_in, check_out, price, payment_method FROM bookings WHERE id = ?";
 
+        try {
+            final PreparedStatement prst = connection.prepareStatement(query);
+
+            try (prst) {
+                prst.setInt(1, id);
+
+                ResultSet rst = prst.executeQuery();
+                try (rst) {
+                    while (rst.next()) {
+                        Booking row = new Booking(
+                                rst.getInt("id"),
+                                rst.getDate("check_in"),
+                                rst.getDate("check_out"),
+                                rst.getInt("price"),
+                                rst.getString("payment_method")
+                        );
+                        bookingList.add(row);
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return bookingList;
+    }
+    
 }
