@@ -121,4 +121,35 @@ public class GuestsDAO {
         return listaGuests;
     }
 
+    public List<Guests> guestsListId(int bookingId){
+        List<Guests> guestsList = new ArrayList<>();
+        String query = "SELECT id, first_name, last_name, birth_date, phone_number, booking_id FROM guests WHERE booking_id = ?";
+
+        try {
+            final PreparedStatement prst = connection.prepareStatement(query);
+            try (prst) {
+                prst.setInt(1, bookingId);
+
+                final ResultSet rst = prst.executeQuery();
+                //final ResultSet rst = prst.getResultSet();
+                try (rst) {
+                    while (rst.next()) {
+                        Guests row = new Guests(
+                                rst.getInt("id"),
+                                rst.getString("first_name"),
+                                rst.getString("last_name"),
+                                rst.getDate(4),
+                                rst.getString(5),
+                                rst.getInt(6)
+                        );
+                        guestsList.add(row);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return guestsList;
+    }
+
 }
