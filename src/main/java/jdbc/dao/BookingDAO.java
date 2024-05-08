@@ -126,7 +126,7 @@ public class BookingDAO {
             try (prst) {
                 prst.setInt(1, id);
 
-                ResultSet rst = prst.executeQuery();
+                final ResultSet rst = prst.executeQuery();
                 try (rst) {
                     while (rst.next()) {
                         Booking row = new Booking(
