@@ -150,6 +150,22 @@ public class DisplayBookingsFrame extends JFrame {
 
 
     private void btnActions() {
+        btnSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearTables();
+                if (textSearch.getText().isBlank()){
+                    fillBookingsTable();
+                    fillGuestsTable();
+                } else {
+                    fillBookingsTableId();
+                    fillGuestsTableId();
+                }
+            }
+        });
+
+
+
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -223,6 +239,20 @@ public class DisplayBookingsFrame extends JFrame {
         }
     }
 
+    private void fillGuestsTableId(){
+        var guestsListId = this.guestsController.listId(Integer.parseInt(textSearch.getText()));
+        for (Guests guests : guestsListId) {
+            tableModelGuests.addRow(new Object[]{
+                    guests.getId(),
+                    guests.getFirstName(),
+                    guests.getLastName(),
+                    guests.getBirthDate(),
+                    guests.getPhoneNumber(),
+                    guests.getBookingId()
+            });
+        }
+    }
+
     private void fillBookingsTable() {
         var bookingList = this.bookingController.list();
         bookingList.forEach(booking -> tableModelBooking.addRow(new Object[]{
@@ -232,7 +262,17 @@ public class DisplayBookingsFrame extends JFrame {
                 booking.getPrice(),
                 booking.getPaymentMethod()
         }));
+    }
 
+    private void fillBookingsTableId(){
+        var bookingListId = this.bookingController.listId(Integer.parseInt(textSearch.getText()));
+        bookingListId.forEach(booking -> tableModelBooking.addRow(new Object[]{
+                booking.getId(),
+                booking.getCheckIn(),
+                booking.getCheckOut(),
+                booking.getPrice(),
+                booking.getPaymentMethod()
+        }));
     }
 
     private void deleteRow() {
