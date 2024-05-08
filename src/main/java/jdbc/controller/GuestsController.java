@@ -34,4 +34,8 @@ public class GuestsController {
     public List<Guests> list() {
         return this.guestsDAO.list();
     }
+
+    public List<Guests> listId(int bookingId){
+        return this.guestsDAO.guestsListId(bookingId);
+    }
 }
