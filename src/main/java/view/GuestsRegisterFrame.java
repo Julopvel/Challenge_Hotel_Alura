@@ -7,20 +7,20 @@ import jdbc.model.Guests;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.Date;
 
 public class GuestsRegisterFrame extends JFrame {
 
+    private int xMouse, yMouse;
+    private JPanel header;
     private JLabel labelFirstName, labelLastName, labelBirthDate, labelPhone, labelBookingId;
     private JTextField textFirstName, textLastName, textPhone, textBookingId;
     private JDateChooser dateBirth;
     private JButton btnOk;
     private  JButton btnReturn;
     private JButton btnExit;
+
 
     private GuestsController guestsController;
 
@@ -50,15 +50,60 @@ public class GuestsRegisterFrame extends JFrame {
         setSize(600, 500);
         setLocationRelativeTo(null);
         setResizable(false);
+        setUndecorated(true);       //Removes the upper bar of the window.
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private void initComponents(int bookingId) {
         JPanel mainPanel = new JPanel();
         mainPanel.setSize(600,500);
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(new Color(238,238,238));
         mainPanel.setLayout(null);
         add(mainPanel);
+
+        header = new JPanel();
+        header.setBounds(0,0,600,40);
+        header.setLayout(null);
+        header.setOpaque(false);                //false so it does not paint the header by default
+        mainPanel.add(header);
+
+        header.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int x = e.getXOnScreen();
+                int y = e.getYOnScreen();
+                setLocation(x - xMouse, y - yMouse);
+            }
+        });
+        header.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                xMouse = e.getX();
+                yMouse = e.getY();
+            }
+        });
+
+        btnReturn = new JButton("<");
+        btnReturn.setBounds(0,0,50,40);
+        btnReturn.setFont(new Font("Roboto Light", Font.PLAIN, 18));
+        btnReturn.setForeground(Color.BLACK);
+        btnReturn.setBackground(new Color(238,238,238));
+        btnReturn.setHorizontalAlignment(SwingConstants.CENTER);
+        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        btnReturn.setFocusPainted(false);
+        btnReturn.setBorderPainted(false);
+        header.add(btnReturn);
+
+
+        btnExit = new JButton("X");
+        btnExit.setBounds(550,0,50,40);
+        btnExit.setFont(new Font("Roboto Light", Font.PLAIN, 18));
+        btnExit.setHorizontalAlignment(SwingConstants.CENTER);
+        btnExit.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        btnExit.setBackground(new Color(238,238,238));
+        btnExit.setBorderPainted(false);
+        header.add(btnExit);
+
 
         int posX = 60;
 
@@ -125,24 +170,6 @@ public class GuestsRegisterFrame extends JFrame {
         btnOk.setForeground(Color.BLACK);
         btnOk.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
-        btnReturn = new JButton("<");
-        btnReturn.setBounds(0,0,50,40);
-        btnReturn.setFont(new Font("Roboto", Font.BOLD, 15));
-        btnReturn.setForeground(Color.BLACK);
-        btnReturn.setBackground(Color.WHITE);
-        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
-        btnReturn.setFocusPainted(false);
-        btnReturn.setBorderPainted(false);
-
-        btnExit = new JButton("X");
-        btnExit.setBounds(550,0,50,40);
-        btnExit.setFont(new Font(null, Font.BOLD, 15));
-        btnExit.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
-        btnExit.setBackground(Color.WHITE);
-//        btnExit.setFocusPainted(false);
-        btnExit.setBorderPainted(false);
-        //btnExit.setForeground();
-        mainPanel.add(btnExit);
 
         mainPanel.add(labelFirstName);
         mainPanel.add(labelLastName);
@@ -157,7 +184,6 @@ public class GuestsRegisterFrame extends JFrame {
         mainPanel.add(textBookingId);
 
         mainPanel.add(btnOk);
-        mainPanel.add(btnReturn);
 
     }
 
@@ -178,15 +204,21 @@ public class GuestsRegisterFrame extends JFrame {
             }
         });
 
-        btnReturn.addActionListener(new ActionListener() {
+//        btnReturn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                new BookingFrame().setVisible(true);
+//                dispose();
+//            }
+//        });
+
+        btnReturn.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 new BookingFrame().setVisible(true);
                 dispose();
             }
-        });
 
-        btnReturn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 btnReturn.setBackground(Color.BLACK);
@@ -195,7 +227,7 @@ public class GuestsRegisterFrame extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btnReturn.setBackground(Color.WHITE);
+                btnReturn.setBackground(new Color(238,238,238));
                 btnReturn.setForeground(Color.BLACK);
             }
         });
@@ -216,7 +248,7 @@ public class GuestsRegisterFrame extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btnExit.setBackground(Color.WHITE);
+                btnExit.setBackground(new Color(238,238,238));
                 btnExit.setForeground(Color.BLACK);
             }
         });

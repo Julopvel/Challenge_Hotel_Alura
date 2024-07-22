@@ -7,10 +7,7 @@ import jdbc.model.Booking;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Date;
@@ -18,6 +15,9 @@ import java.time.LocalDate;
 import java.util.Calendar;
 
 public class BookingFrame extends JFrame {
+
+    private int xMouse, yMouse;
+    private JPanel header;
     private JLabel labelCheckIn, labelCheckOut, labelBookingPrice, labelPaymentMethod;
     private JDateChooser dateCheckIn, dateCheckOut;
     private JFormattedTextField textBookingPrice;
@@ -50,14 +50,54 @@ public class BookingFrame extends JFrame {
         setSize(600, 450);
         setLocationRelativeTo(null);
         setResizable(false);
+        setUndecorated(true);       //Removes the upper bar of the window.
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
     private void initComponents(Container container){
         //container that includes within the rest of components (labels, buttons, comboBox, ...)
-        container.setBackground(Color.WHITE);
+        container.setBackground(new Color(238,238,238));
 
+        header = new JPanel();
+        header.setBounds(0,0,600,40);
+        header.setLayout(null);
+        header.setOpaque(false);                //false so it does not paint the header by default
+        container.add(header);
+
+        header.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int x = e.getXOnScreen();
+                int y = e.getYOnScreen();
+                setLocation(x - xMouse, y - yMouse);
+            }
+        });
+        header.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                xMouse = e.getX();
+                yMouse = e.getY();
+            }
+        });
+
+        btnReturn = new JButton("<");
+        btnReturn.setBounds(0,0,50,40);
+        btnReturn.setFont(new Font("Roboto", Font.PLAIN, 18));
+        btnReturn.setForeground(Color.BLACK);
+        btnReturn.setBackground(new Color(238,238,238));
+        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        btnReturn.setFocusPainted(false);
+        btnReturn.setBorderPainted(false);
+        header.add(btnReturn);
+
+        JPanel logoPanel = new JPanel();
+        logoPanel.setBounds(20,80,185,265);
+        container.add(logoPanel);
+
+        JLabel logo = new JLabel();
+        logo.setIcon(new ImageIcon(BookingFrame.class.getResource("/images/booking.png")));
+        logoPanel.add(logo);
 
         int posX = 270;
 
@@ -120,16 +160,6 @@ public class BookingFrame extends JFrame {
         btnOK.setForeground(Color.BLACK);
         btnOK.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
-        btnReturn = new JButton("<");
-        btnReturn.setBounds(0,0,50,40);
-        btnReturn.setFont(new Font("Roboto", Font.BOLD, 15));
-        btnReturn.setForeground(Color.BLACK);
-        btnReturn.setBackground(Color.WHITE);
-        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
-        btnReturn.setFocusPainted(false);
-        btnReturn.setBorderPainted(false);
-
-
 
         container.add(labelCheckIn);
         container.add(labelCheckOut);
@@ -141,10 +171,6 @@ public class BookingFrame extends JFrame {
         container.add(comboPaymentMethod);
 
         container.add(btnOK);
-        container.add(btnReturn);
-//        container.add(btnCancel);
-//        container.add(btnClear);
-
     }
 
     private void btnActions(){
@@ -165,7 +191,7 @@ public class BookingFrame extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btnReturn.setBackground(Color.WHITE);
+                btnReturn.setBackground(new Color(238,238,238));
                 btnReturn.setForeground(Color.BLACK);
             }
         });

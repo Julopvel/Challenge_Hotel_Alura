@@ -7,14 +7,13 @@ import jdbc.model.Guests;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.sql.Date;
 
 public class DisplayBookingsFrame extends JFrame {
 
+    private int xMouse, yMouse;
+    private JPanel header;
     private JTable tableBookings, tableGuests;
     private DefaultTableModel tableModelBooking, tableModelGuests;
     private JButton btnEdit, btnDelete, btnReturn;
@@ -49,6 +48,7 @@ public class DisplayBookingsFrame extends JFrame {
         setSize(900, 570);
         setLocationRelativeTo(null);
         setResizable(false);
+        setUndecorated(true);       //Removes the upper bar of the window.
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -56,9 +56,41 @@ public class DisplayBookingsFrame extends JFrame {
     private void initComponents() {
         JPanel mainPanel = new JPanel();
         mainPanel.setSize(900,570);
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(new Color(238,238,238));
         mainPanel.setLayout(null);
         add(mainPanel);
+
+        header = new JPanel();
+        header.setBounds(0,0,600,40);
+        header.setLayout(null);
+        header.setOpaque(false);                //false so it does not paint the header by default
+        mainPanel.add(header);
+
+        header.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int x = e.getXOnScreen();
+                int y = e.getYOnScreen();
+                setLocation(x - xMouse, y - yMouse);
+            }
+        });
+        header.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                xMouse = e.getX();
+                yMouse = e.getY();
+            }
+        });
+
+        btnReturn = new JButton("<");
+        btnReturn.setBounds(0,0,50,40);
+        btnReturn.setFont(new Font("Roboto", Font.PLAIN, 18));
+        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+        btnReturn.setForeground(Color.BLACK);
+        btnReturn.setBackground(new Color(238,238,238));
+        btnReturn.setFocusPainted(false);
+        btnReturn.setBorderPainted(false);
+        header.add(btnReturn);
 
         labelTitle = new JLabel("SEARCH ENGINE");
         labelTitle.setBounds(340, 40, 190, 31);
@@ -76,7 +108,6 @@ public class DisplayBookingsFrame extends JFrame {
         btnSearch.setForeground(Color.BLACK);
         btnSearch.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
         mainPanel.add(btnSearch);
-
 
 
         // Creates a tabbed pane (panel con pestañas). Bookings & Guests tables will be added to it.
@@ -133,19 +164,9 @@ public class DisplayBookingsFrame extends JFrame {
         btnDelete.setForeground(Color.BLACK);
         btnDelete.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
 
-        btnReturn = new JButton("<");
-        btnReturn.setBounds(0,0,50,40);
-        btnReturn.setFont(new Font("Roboto", Font.BOLD, 15));
-        btnReturn.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
-        btnReturn.setForeground(Color.BLACK);
-        btnReturn.setBackground(Color.WHITE);
-        btnReturn.setFocusPainted(false);
-        btnReturn.setBorderPainted(false);
-
 
         mainPanel.add(btnEdit);
         mainPanel.add(btnDelete);
-        mainPanel.add(btnReturn);
     }
 
 
@@ -209,7 +230,7 @@ public class DisplayBookingsFrame extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                btnReturn.setBackground(Color.WHITE);
+                btnReturn.setBackground(new Color(238,238,238));
                 btnReturn.setForeground(Color.BLACK);
             }
         });
